@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j2112.mapper.SiteMapper">
+    <sql id="site_cloum">
+        site_id siteId,
+        site_name siteName,
+        site_addr siteAddr,
+        site_tel siteTel,
+        site_person sitePerson
+    </sql>
+    <select id="findAll" parameterType="com.qf.j2112.po.Site" resultType="com.qf.j2112.po.Site">
+        select <include refid="site_cloum"></include> from bs_site
+    </select>
+    <update id="updateSite" parameterType="com.qf.j2112.po.Site">
+        update bs_site set site_name=#{siteName},site_addr=#{siteAddr},site_tel=#{siteTel},site_person=#{sitePerson} where site_id=#{siteId}
+    </update>
+    <delete id="delSite" parameterType="com.qf.j2112.po.Site">
+        delete from bs_site where site_id=#{siteId}
+    </delete>
+    <select id="findBySite" parameterType="com.qf.j2112.po.Site" resultType="com.qf.j2112.po.Site">
+        select <include refid="site_cloum"></include> from bs_site
+        <where>
+        <trim  suffixOverrides="and|or">
+            <if test="siteId!=0">
+                site_id=#{siteId} or
+            </if>
+            <if test="siteName!=''">
+                site_name like concat('%',#{siteName},'%') or
+            </if>
+            <if test="sitePerson!=''">
+                site_person like concat('%',#{sitePerson},'%')
+            </if>
+        </trim>
+        </where>
+    </select>
+    <insert id="addSite" parameterType="com.qf.j2112.po.Site">
+        insert into bs_site(site_id,site_name,site_addr,site_tel,site_person)
+        values (0,#{siteName},#{siteAddr},#{siteTel},#{sitePerson})
+    </insert>
+</mapper>

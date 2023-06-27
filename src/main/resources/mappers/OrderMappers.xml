@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j2112.mapper.OrderMapper">
+    <sql id="order_cloum">
+        order_id orderid,
+        order_name ordername,
+        order_time ordertime,
+        order_tel ordertel,
+        order_state orderstate,
+        start_site startsite,
+        end_site endsite,
+        recipient_name recname,
+        c.com_name comname,
+        recipient_addr recaddr,
+        recipient_tel rectel,
+        order_price orderprice
+    </sql>
+
+    <select id="findAll" resultType="com.qf.j2112.po.Order">
+        select <include refid="order_cloum"></include> from bs_order o,bs_company c where o.com_name=c.com_id
+    </select>
+    <sql id="order_cloum2">
+        order_id orderid,
+        order_name ordername,
+        order_time ordertime,
+        order_tel ordertel,
+        order_state orderstate,
+        start_site startsite,
+        end_site endsite,
+        recipient_name recname,
+        com_name comname,
+        recipient_addr recaddr,
+        recipient_tel rectel,
+        order_price orderprice
+    </sql>
+    <select id="findOne" parameterType="com.qf.j2112.vo.OrderInfo" resultType="com.qf.j2112.po.Order">
+        select <include refid="order_cloum2"></include> from bs_order
+<!--        <where>-->
+        <trim prefix="where" suffixOverrides="and|or">
+
+            <if test="orderid!=0">
+                 order_id=#{orderid} or
+            </if>
+            <if test="comname!=null">
+                com_name=#{comname} or
+            </if>
+            <if test="date1!=null">
+                order_time between #{date1} and #{date2}
+            </if>
+        </trim>
+<!--        </where>-->
+    </select>
+    <insert id="addOrder" parameterType="com.qf.j2112.po.Order">
+        <selectKey keyColumn="order_id" keyProperty="orderid" order="AFTER" resultType="Integer">
+            select last_insert_id()
+        </selectKey>
+        insert into bs_order(order_id,order_name,order_time,order_tel,order_state,start_site,end_site,recipient_name,com_name,recipient_addr,recipient_tel,order_price)
+        values (0,#{ordername},#{ordertime},#{ordertel},#{orderstate},#{startsite},#{endsite},#{recname},#{comname},#{recaddr},#{rectel},#{orderprice})
+    </insert>
+    <delete id="delOrder" parameterType="com.qf.j2112.po.Order">
+        delete from bs_order where order_id=#{orderid}
+    </delete>
+    <select id="findByID" parameterType="int" resultType="com.qf.j2112.po.Order">
+        select <include refid="order_cloum"></include> from bs_order o,bs_company c where o.com_name=c.com_id  and o.order_id=#{id}
+    </select>
+
+    <update id="updateOrderState" parameterType="com.qf.j2112.po.Order">
+        update bs_order set order_state=#{orderstate} where order_id=#{orderid}
+    </update>
+</mapper>

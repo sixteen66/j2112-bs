@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j2112.mapper.GoodsMapper">
+    <insert id="addGoods" parameterType="com.qf.j2112.po.Goods">
+        insert into bs_goods(goods_id,order_id,goods_state,start_site,end_site,send_time,goods_kg,goods_vm)
+        values (0,#{orderid},#{goodsstate},#{startsite},#{endsite},#{sendtime},#{goodskg},#{goodsvm})
+    </insert>
+    <sql id="goods_cloum">
+        goods_id goodsid,
+        order_id orderid,
+        goods_state goodsstate,
+        start_site startsite,
+        end_site endsite,
+        send_time sendtime,
+        goods_kg goodskg,
+        goods_vm goodsvm,
+        get_time gettime
+    </sql>
+    <select id="findByState" parameterType="com.qf.j2112.po.Goods" resultType="com.qf.j2112.po.Goods">
+        select <include refid="goods_cloum"></include> from bs_goods where goods_state=#{goodsstate}
+    </select>
+    <update id="updateGoodState" parameterType="com.qf.j2112.po.Goods">
+        update bs_goods set goods_state=#{goodsstate},send_time=#{sendtime} where order_id=#{orderid}
+    </update>
+    <update id="updateEndGoodState" parameterType="com.qf.j2112.po.Goods">
+        update bs_goods set goods_state=#{goodsstate},get_time=#{gettime} where order_id=#{orderid}
+    </update>
+    <update id="updateGetGoodState" parameterType="com.qf.j2112.po.Goods">
+         update bs_goods set goods_state=#{goodsstate} where order_id=#{orderid}
+    </update>
+</mapper>

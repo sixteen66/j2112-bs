@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j2112.mapper.CompanyMapper">
+    <sql id="company_cloum">
+        com_id comid,
+        com_name comname,
+        com_interduction cominterduction,
+        com_tel comtel,
+        com_prcie comprice,
+        com_addr comaddr
+    </sql>
+    <select id="findAll" resultType="com.qf.j2112.po.Company">
+        select <include refid="company_cloum"></include> from bs_company
+    </select>
+    <delete id="delCompany" parameterType="com.qf.j2112.po.Company">
+        delete from bs_company where com_id=#{comid}
+    </delete>
+    <insert id="addCompany" parameterType="com.qf.j2112.po.Company">
+        <selectKey keyColumn="com_id" keyProperty="comid" resultType="Integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into bs_company(com_id,com_name,com_interduction,com_tel,com_prcie,com_addr)
+        values (#{comid},#{comname},#{cominterduction},#{comtel},#{comprice},#{comaddr})
+    </insert>
+    <select id="findOneById" resultType="com.qf.j2112.po.Company" parameterType="int">
+        select <include refid="company_cloum"></include> from bs_company where com_id=#{id}
+    </select>
+    <select id="findOneByname" resultType="com.qf.j2112.po.Company" parameterType="string">
+        select <include refid="company_cloum"></include> from bs_company where com_name=#{name}
+    </select>
+</mapper>

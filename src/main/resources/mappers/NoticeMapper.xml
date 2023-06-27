@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j2112.mapper.NoticeMapper">
+    <sql id="notice_cloum">
+        notice_id id,
+        notice_action noAction,
+        notice_date noTime
+    </sql>
+    <select id="findNotice" resultType="com.qf.j2112.po.Notice">
+        select <include refid="notice_cloum"></include> from bs_notice where notice_id=1
+    </select>
+    <update id="updateNotice" >
+        update bs_notice set notice_id=0 where notice_id=1
+    </update>
+    <insert id="addNotice" parameterType="com.qf.j2112.po.Notice">
+        insert into bs_notice(notice_id,notice_action,notice_date) values (1,#{noAction},#{noTime})
+    </insert>
+</mapper>
